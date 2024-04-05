@@ -12,35 +12,86 @@
 # - Создайте несколько классов, унаследованных от `Weapon`, например, `Sword` и `Bow`.
 # Каждый из этих классов реализует метод `attack()` своим уникальным способом.
 # Шаг 3: Модифицируйте класс `Fighter`
-#
 # - Добавьте в класс `Fighter` поле, которое будет хранить объект класса `Weapon`.
-#
 # - Добавьте метод `changeWeapon()`, который позволяет изменить оружие бойца.
-#
 # Шаг 4: Реализация боя
-#
 # - Реализуйте простой механизм для демонстрации боя между бойцом и монстром, исходя из выбранного оружия.
-#
 # Требования к заданию:
-#
 # - Код должен быть написан на Python.
-#
-# - Программа должна демонстрировать применение принципа открытости/закрытости: новые типы оружия можно легко добавлять, не изменяя существующие классы бойцов и механизм боя.
-#
+# - Программа должна демонстрировать применение принципа открытости/закрытости:
+# новые типы оружия можно легко добавлять, не изменяя существующие классы бойцов и механизм боя.
 # - Программа должна выводить результат боя в консоль.
 #
 # Пример результата:
-#
+
 # Боец выбирает меч.
-#
 # Боец наносит удар мечом.
-#
 # Монстр побежден!
-#
 # Боец выбирает лук.
-#
 # Боец наносит удар из лука.
-#
 # Монстр побежден!
+
+from abc import ABC, abstractmethod
+
+class Weapon:
+    @abstractmethod
+    def attack(self, monster):
+        pass
+
+
+class Sword(Weapon):
+    def __init__(self, name):
+        self.name = name
+    def attack(self, monster, fighter):
+        print(f"Боец {fighter.name} наносит удар мечом по монстру {monster.name}")
+
+
+class Bow(Weapon):
+    def __init__(self,name):
+        self.name = name
+
+    def attack(self, monster, fighter):
+        print(f"Боец {fighter.name} атакует монстра {monster.name} из лука")
+
+
+class Fighter:
+    def __init__(self,name):
+        self.name = name
+        self.weapon = None
+
+    def change_weapon(self, weapon):
+        self.weapon = weapon
+        print (f"Боец {self.name} выбирает оружие {weapon.name}")
+
+    def attack_monster(self, monster):
+        if self.weapon:
+            self.weapon.attack(monster, self)
+            monster.defeat (self.weapon)
+        else:
+            print("Оружие не выбрано!")
+
+
+class Monster:
+
+    def __init__(self,name):
+        self.name = name
+
+    def defeat(self,weapon):
+        print(f"Монстр {self.name} побежден оружием {weapon.name}")
+
+
+monster = Monster("Гоблин")
+fighter = Fighter("Артур")
+sword = Sword("Меч короля")
+bow = Bow("Всемогущий Лук")
+
+fighter.change_weapon(sword)
+fighter.attack_monster(monster)
+
+fighter.change_weapon(bow)
+fighter.attack_monster(monster)
+
+
+
 
 
